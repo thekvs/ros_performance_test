@@ -69,6 +69,7 @@ main(int argc, char **argv)
         for (int i = 0; i < payload_size; i++) {
             msg.data.push_back(small_ints(gen));
         }
+        msg.value = std::accumulate(msg.data.begin(), msg.data.end(), 0U);
         msg.ts = ros::Time::now();
 
         chatter_pub.publish(msg);
