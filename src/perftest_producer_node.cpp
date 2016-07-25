@@ -1,11 +1,19 @@
+#include <boost/random/uniform_int_distribution.hpp>
+#include <boost/random.hpp>
+#include <boost/generator_iterator.hpp>
+
 #include <ros/ros.h>
 #include <unique_id/unique_id.h>
 
 #include "ros_perfomance_test/TestMessage.h"
 
+typedef boost::random::uniform_int_distribution<int> UniformDistribution;
+
 static const int kDefaultRateParameter = 10;
 static const int kDefaultPayloadSize = 64;
 static const int kDefaultQueueSize = 1000;
+
+static boost::mt19937 gen;
 
 int
 main(int argc, char **argv)
@@ -14,6 +22,8 @@ main(int argc, char **argv)
 
     ros::NodeHandle nh;
     ros::NodeHandle priv_nh("~");
+
+    gen.seed(time(NULL));
 
     int queue_size;
     int rate;
@@ -46,12 +56,20 @@ main(int argc, char **argv)
 
     uint32_t seq = 0;
 
+    ros_perfomance_test::TestMessage msg;
+    msg.data.reserve(payload_size);
+    msg.uid = unique_id::toMsg(node_uid);
+
+    boost::random::uniform_int_distribution<> small_ints(0, 255);
+
     while (ros::ok()) {
-        ros_perfomance_test::TestMessage msg;
+        msg.data.clear();
 
         msg.seq = ++seq;
+        for (int i = 0; i < payload_size; i++) {
+            msg.data.push_back(small_ints(gen));
+        }
         msg.ts = ros::Time::now();
-        msg.uid = unique_id::toMsg(node_uid);
 
         chatter_pub.publish(msg);
 
