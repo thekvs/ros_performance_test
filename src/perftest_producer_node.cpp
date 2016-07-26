@@ -1,6 +1,7 @@
 #include <boost/random/uniform_int_distribution.hpp>
 #include <boost/random.hpp>
 #include <boost/generator_iterator.hpp>
+#include <boost/functional/hash.hpp>
 
 #include <ros/ros.h>
 #include <unique_id/unique_id.h>
@@ -44,9 +45,9 @@ main(int argc, char **argv)
         queue_size = kDefaultQueueSize;
     }
 
-    boost::uuids::uuid node_uid = unique_id::fromRandom();
+    uint16_t uid = boost::hash_value<boost::uuids::uuid>(unique_id::fromRandom()) % std::numeric_limits<uint16_t>::max();
 
-    ROS_INFO_STREAM("Node's UUID: " << node_uid);
+    ROS_INFO_STREAM("Node's ID: " << uid);
     ROS_INFO_STREAM("Payload size: " << payload_size);
     ROS_INFO_STREAM("Message queue size: " << queue_size);
     ROS_INFO_STREAM("Publish rate: " << rate);
@@ -58,7 +59,7 @@ main(int argc, char **argv)
 
     ros_perfomance_test::TestMessage msg;
     msg.data.reserve(payload_size);
-    msg.uid = unique_id::toMsg(node_uid);
+    msg.uid = uid;
 
     boost::random::uniform_int_distribution<> small_ints(0, 255);
 
