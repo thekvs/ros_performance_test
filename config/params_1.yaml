@@ -1,1 +1,3 @@
-rate: 1
+rate: 30
+payload_size: 8
+queue_size: 300
