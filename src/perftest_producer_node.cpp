@@ -59,19 +59,19 @@ main(int argc, char **argv)
 
     ros_perfomance_test::TestMessage msg;
     msg.data.reserve(payload_size);
-    msg.uid = uid;
+    msg.header.uid = uid;
 
     boost::random::uniform_int_distribution<> small_ints(0, 255);
 
     while (ros::ok()) {
         msg.data.clear();
 
-        msg.seq = ++seq;
+        msg.header.seq = ++seq;
         for (int i = 0; i < payload_size; i++) {
             msg.data.push_back(small_ints(gen));
         }
-        msg.value = std::accumulate(msg.data.begin(), msg.data.end(), 0U);
-        msg.ts = ros::Time::now();
+        msg.header.value = std::accumulate(msg.data.begin(), msg.data.end(), 0U);
+        msg.header.ts = ros::Time::now();
 
         chatter_pub.publish(msg);
 

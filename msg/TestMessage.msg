@@ -1,5 +1,2 @@
-uint32 seq
-time ts
-uint16 uid
-uint32 value
+ros_perfomance_test/TestMessageHeader header
 uint8[] data
