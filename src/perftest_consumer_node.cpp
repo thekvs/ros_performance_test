@@ -83,7 +83,7 @@ main(int argc, char **argv)
 
     ros::spin();
 
-    std::cerr << "Exit requested, writing " << log_data.size() << " log entries" << std::endl;
+    ROS_INFO_STREAM("Writing " << log_data.size() << " log entries");
 
     write_log(log_file, log_data);
 
