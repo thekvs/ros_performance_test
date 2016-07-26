@@ -14,6 +14,14 @@ struct LogEntry
     ros::Time ts;
 };
 
+std::ostream& operator<<(std::ostream& stream, const LogEntry& e)
+{
+    stream << e.incoming.uid << "," << e.incoming.seq << "," << e.incoming.value << "," << e.incoming.ts.sec << "," << e.incoming.ts.nsec << ",";
+    stream << e.data_hash << "," << e.ts.sec << "," << e.ts.nsec;
+
+    return stream;
+}
+
 typedef std::vector<LogEntry> LogEntries;
 
 static const std::string kDefaultLogFile = "/tmp/ros_perftest.log";
@@ -27,7 +35,7 @@ bool write_log(const std::string &fname, const LogEntries &log_data)
     std::fstream result(fname.c_str(), std::fstream::out);
 
     for (size_t i = 0; i < log_data.size(); i++) {
-        result << log_data[i].incoming << std::endl;
+        result << log_data[i] << std::endl;
     }
 
     return true;
