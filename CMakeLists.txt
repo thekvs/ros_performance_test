@@ -129,6 +129,7 @@ include_directories(
 
 ## Declare a C++ executable
 add_executable(perftest_producer_node src/perftest_producer_node.cpp)
+add_executable(perftest_consumer_node src/perftest_consumer_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -136,6 +137,11 @@ add_executable(perftest_producer_node src/perftest_producer_node.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(perftest_producer_node
+  ${catkin_LIBRARIES}
+  ${Boost_LIBRARIES}
+)
+
+target_link_libraries(perftest_consumer_node
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
 )
@@ -154,7 +160,7 @@ target_link_libraries(perftest_producer_node
 #   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 
-install(TARGETS perftest_producer_node
+install(TARGETS perftest_producer_node perftest_consumer_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
