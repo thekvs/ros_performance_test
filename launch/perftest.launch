@@ -1,8 +1,8 @@
 <launch>
-  <node name="perftest_producer_node_1" pkg="ros_perfomance_test" type="perftest_producer_node" output="screen">
-    <rosparam file="$(find ros_perfomance_test)/config/params_1.yaml" command="load"/>
+  <node name="perftest_producer_node_1" pkg="ros_performance_test" type="perftest_producer_node" output="screen">
+    <rosparam file="$(find ros_performance_test)/config/params_1.yaml" command="load"/>
   </node>
-  <node name="perftest_producer_node_2" pkg="ros_perfomance_test" type="perftest_producer_node" output="screen">
-    <rosparam file="$(find ros_perfomance_test)/config/params_2.yaml" command="load"/>
+  <node name="perftest_producer_node_2" pkg="ros_performance_test" type="perftest_producer_node" output="screen">
+    <rosparam file="$(find ros_performance_test)/config/params_2.yaml" command="load"/>
   </node>
 </launch>

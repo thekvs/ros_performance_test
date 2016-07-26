@@ -1,8 +1,8 @@
 #include <ros/ros.h>
 
-#include "ros_perfomance_test/TestMessage.h"
+#include "ros_performance_test/TestMessage.h"
 
-void data_cb(const ros_perfomance_test::TestMessage::ConstPtr& msg)
+void data_cb(const ros_performance_test::TestMessage::ConstPtr& msg)
 {
     ROS_INFO_STREAM(std::endl << *msg << "----");
 }

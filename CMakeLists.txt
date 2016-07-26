@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(ros_perfomance_test)
+project(ros_performance_test)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -102,7 +102,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES ros_perfomance_test
+#  LIBRARIES ros_performance_test
 #  CATKIN_DEPENDS roscpp
 #  DEPENDS system_lib
 )
@@ -119,14 +119,14 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(ros_perfomance_test
-#   src/${PROJECT_NAME}/ros_perfomance_test.cpp
+# add_library(ros_performance_test
+#   src/${PROJECT_NAME}/ros_performance_test.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(ros_perfomance_test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(ros_performance_test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 add_executable(perftest_producer_node src/perftest_producer_node.cpp)
@@ -186,7 +186,7 @@ install(TARGETS perftest_producer_node perftest_consumer_node
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_ros_perfomance_test.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_ros_performance_test.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>ros_perfomance_test</name>
+  <name>ros_performance_test</name>
   <version>0.1.0</version>
-  <description>The ros_perfomance_test package</description>
+  <description>The ros_performance_test package</description>
 
   <maintainer email="kvs@sigterm.ru">Konstantin Sorokin</maintainer>
 

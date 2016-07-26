@@ -6,7 +6,7 @@
 #include <ros/ros.h>
 #include <unique_id/unique_id.h>
 
-#include "ros_perfomance_test/TestMessage.h"
+#include "ros_performance_test/TestMessage.h"
 
 typedef boost::random::uniform_int_distribution<int> UniformDistribution;
 
@@ -52,12 +52,12 @@ main(int argc, char **argv)
     ROS_INFO_STREAM("Message queue size: " << queue_size);
     ROS_INFO_STREAM("Publish rate: " << rate);
 
-    ros::Publisher chatter_pub = nh.advertise<ros_perfomance_test::TestMessage>("producer", queue_size);
+    ros::Publisher chatter_pub = nh.advertise<ros_performance_test::TestMessage>("producer", queue_size);
     ros::Rate loop_rate(rate);
 
     uint32_t seq = 0;
 
-    ros_perfomance_test::TestMessage msg;
+    ros_performance_test::TestMessage msg;
     msg.data.reserve(payload_size);
     msg.header.uid = uid;
 
