@@ -10,7 +10,7 @@
 
 typedef boost::random::uniform_int_distribution<int> UniformDistribution;
 
-static const int kDefaultRateParameter = 10;
+static const int kDefaultRate = 10;
 static const int kDefaultPayloadSize = 64;
 static const int kDefaultQueueSize = 1000;
 
@@ -31,8 +31,8 @@ main(int argc, char **argv)
     int payload_size;
 
     if (!priv_nh.getParam("rate", rate)) {
-        ROS_WARN_STREAM("couldn't find 'rate' configuration parameter, using the default=" << kDefaultRateParameter);
-        rate = kDefaultRateParameter;
+        ROS_WARN_STREAM("couldn't find 'rate' configuration parameter, using the default=" << kDefaultRate);
+        rate = kDefaultRate;
     }
 
     if (!priv_nh.getParam("payload_size", payload_size)) {
