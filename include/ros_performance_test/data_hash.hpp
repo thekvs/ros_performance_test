@@ -1,12 +1,12 @@
 #ifndef __DATA_HASH_HPP_INCLUDED__
 #define __DATA_HASH_HPP_INCLUDED__
 
-#include <numeric>
 #include <iterator>
+#include <numeric>
 
 #include <boost/functional/hash.hpp>
 
-template<typename Iterator>
+template <typename Iterator>
 uint32_t
 data_hash_1(Iterator begin, Iterator end)
 {
@@ -15,7 +15,7 @@ data_hash_1(Iterator begin, Iterator end)
     return (std::accumulate(begin, end, initial));
 }
 
-template<typename Iterator>
+template <typename Iterator>
 uint32_t
 data_hash_2(Iterator begin, Iterator end)
 {

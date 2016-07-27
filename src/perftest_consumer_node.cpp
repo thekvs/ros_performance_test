@@ -1,6 +1,6 @@
-#include <vector>
-#include <numeric>
 #include <fstream>
+#include <numeric>
+#include <vector>
 
 #include <ros/ros.h>
 #include <std_msgs/Time.h>
@@ -8,16 +8,17 @@
 #include "ros_performance_test/TestMessage.h"
 #include "ros_performance_test/data_hash.hpp"
 
-struct LogEntry
-{
+struct LogEntry {
     ros_performance_test::TestMessageHeader incoming;
     uint32_t data_hash;
     ros::Time ts;
 };
 
-std::ostream& operator<<(std::ostream& stream, const LogEntry& e)
+std::ostream&
+operator<<(std::ostream& stream, const LogEntry& e)
 {
-    stream << e.incoming.uid << "," << e.incoming.seq << "," << e.incoming.data_hash << "," << e.incoming.ts.sec << "," << e.incoming.ts.nsec << ",";
+    stream << e.incoming.uid << "," << e.incoming.seq << "," << e.incoming.data_hash << "," << e.incoming.ts.sec << ","
+           << e.incoming.ts.nsec << ",";
     stream << e.data_hash << "," << e.ts.sec << "," << e.ts.nsec;
 
     return stream;
@@ -28,7 +29,8 @@ typedef std::vector<LogEntry> LogEntries;
 static const std::string kDefaultLogFile = "/tmp/ros_perftest.log";
 static const int kDefaultQueueSize = 1000;
 
-bool write_log(const std::string &fname, const LogEntries &log_data)
+bool
+write_log(const std::string& fname, const LogEntries& log_data)
 {
     if (fname.empty()) {
         return false;
@@ -43,7 +45,8 @@ bool write_log(const std::string &fname, const LogEntries &log_data)
     return true;
 }
 
-void data_cb(const ros_performance_test::TestMessage::ConstPtr& msg, LogEntries &log_data)
+void
+data_cb(const ros_performance_test::TestMessage::ConstPtr& msg, LogEntries& log_data)
 {
     LogEntry e;
 
@@ -55,7 +58,7 @@ void data_cb(const ros_performance_test::TestMessage::ConstPtr& msg, LogEntries 
 }
 
 int
-main(int argc, char **argv)
+main(int argc, char** argv)
 {
     ros::init(argc, argv, "consumer");
 
@@ -80,7 +83,8 @@ main(int argc, char **argv)
     LogEntries log_data;
     log_data.reserve(10000);
 
-    ros::Subscriber sub = nh.subscribe<ros_performance_test::TestMessage>("producer", queue_size, boost::bind(data_cb, _1, boost::ref(log_data)));
+    ros::Subscriber sub
+        = nh.subscribe<ros_performance_test::TestMessage>("producer", queue_size, boost::bind(data_cb, _1, boost::ref(log_data)));
 
     ros::spin();
 
@@ -90,4 +94,3 @@ main(int argc, char **argv)
 
     return 0;
 }
-

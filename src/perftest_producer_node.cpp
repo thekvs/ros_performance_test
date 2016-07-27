@@ -1,7 +1,7 @@
-#include <boost/random/uniform_int_distribution.hpp>
-#include <boost/random.hpp>
-#include <boost/generator_iterator.hpp>
 #include <boost/functional/hash.hpp>
+#include <boost/generator_iterator.hpp>
+#include <boost/random.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
 
 #include <ros/ros.h>
 #include <unique_id/unique_id.h>
@@ -18,7 +18,7 @@ static const int kDefaultQueueSize = 1000;
 static boost::mt19937 gen;
 
 int
-main(int argc, char **argv)
+main(int argc, char** argv)
 {
     ros::init(argc, argv, "producer");
 
