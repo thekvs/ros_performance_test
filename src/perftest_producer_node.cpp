@@ -71,7 +71,7 @@ main(int argc, char **argv)
         for (int i = 0; i < payload_size; i++) {
             msg.data.push_back(small_ints(gen));
         }
-        msg.header.value = data_hash_2(msg.data.begin(), msg.data.end());
+        msg.header.data_hash = data_hash_2(msg.data.begin(), msg.data.end());
         msg.header.ts = ros::Time::now();
 
         chatter_pub.publish(msg);

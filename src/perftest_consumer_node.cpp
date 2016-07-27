@@ -17,7 +17,7 @@ struct LogEntry
 
 std::ostream& operator<<(std::ostream& stream, const LogEntry& e)
 {
-    stream << e.incoming.uid << "," << e.incoming.seq << "," << e.incoming.value << "," << e.incoming.ts.sec << "," << e.incoming.ts.nsec << ",";
+    stream << e.incoming.uid << "," << e.incoming.seq << "," << e.incoming.data_hash << "," << e.incoming.ts.sec << "," << e.incoming.ts.nsec << ",";
     stream << e.data_hash << "," << e.ts.sec << "," << e.ts.nsec;
 
     return stream;
