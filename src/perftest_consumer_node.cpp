@@ -38,6 +38,19 @@ write_log(const std::string& fname, const LogEntries& log_data)
 
     std::fstream result(fname.c_str(), std::fstream::out);
 
+    const char* headers[] = { "node_id", "sequence_number", "data_hash_on_sender", "ts_sec_sent", "ts_nsec_sent", "data_hash_on_receiver",
+        "ts_sec_received", "ts_nsec_received", NULL };
+
+    int idx = 0;
+    while (headers[idx] != NULL) {
+        if (idx != 0) {
+            result << ",";
+        }
+        result << headers[idx];
+        idx++;
+    }
+    result << std::endl;
+
     for (size_t i = 0; i < log_data.size(); i++) {
         result << log_data[i] << std::endl;
     }
