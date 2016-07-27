@@ -6,6 +6,7 @@
 #include <std_msgs/Time.h>
 
 #include "ros_performance_test/TestMessage.h"
+#include "ros_performance_test/data_hash.hpp"
 
 struct LogEntry
 {
@@ -47,7 +48,7 @@ void data_cb(const ros_performance_test::TestMessage::ConstPtr& msg, LogEntries 
     LogEntry e;
 
     e.incoming = msg->header;
-    e.data_hash = std::accumulate(msg->data.begin(), msg->data.end(), 0U);
+    e.data_hash = data_hash_2(msg->data.begin(), msg->data.end());
     e.ts = ros::Time::now();
 
     log_data.push_back(e);

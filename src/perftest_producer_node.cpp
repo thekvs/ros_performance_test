@@ -7,6 +7,7 @@
 #include <unique_id/unique_id.h>
 
 #include "ros_performance_test/TestMessage.h"
+#include "ros_performance_test/data_hash.hpp"
 
 typedef boost::random::uniform_int_distribution<int> UniformDistribution;
 
@@ -70,7 +71,7 @@ main(int argc, char **argv)
         for (int i = 0; i < payload_size; i++) {
             msg.data.push_back(small_ints(gen));
         }
-        msg.header.value = std::accumulate(msg.data.begin(), msg.data.end(), 0U);
+        msg.header.value = data_hash_2(msg.data.begin(), msg.data.end());
         msg.header.ts = ros::Time::now();
 
         chatter_pub.publish(msg);
