@@ -133,6 +133,9 @@ include_directories(
 add_executable(perftest_producer_node src/perftest_producer_node.cpp)
 add_executable(perftest_consumer_node src/perftest_consumer_node.cpp)
 
+add_dependencies(perftest_producer_node ${PROJECT_NAME}_gencpp)
+add_dependencies(perftest_consumer_node ${PROJECT_NAME}_gencpp)
+
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(perftest_producer_node ${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
