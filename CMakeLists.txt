@@ -13,7 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 ## System dependencies are found with CMake's conventions
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED thread system)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -120,9 +120,10 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(ros_performance_test
-#   src/${PROJECT_NAME}/ros_performance_test.cpp
-# )
+add_library(performance_test
+    src/perftest_producer_nodelet.cpp
+    src/perftest_consumer_nodelet.cpp
+)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -135,6 +136,8 @@ add_executable(perftest_consumer_node src/perftest_consumer_node.cpp)
 
 add_dependencies(perftest_producer_node ${PROJECT_NAME}_gencpp)
 add_dependencies(perftest_consumer_node ${PROJECT_NAME}_gencpp)
+
+add_dependencies(performance_test ${PROJECT_NAME}_gencpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -149,6 +152,11 @@ target_link_libraries(perftest_producer_node
 target_link_libraries(perftest_consumer_node
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
+)
+
+target_link_libraries(performance_test
+    ${catkin_LIBRARIES}
+    ${Boost_LIBRARIES}
 )
 
 #############

@@ -1,0 +1,12 @@
+<library path="lib/libperformance_test">
+  <class name="ros_performance_test/PerftestProducer" type="ros_performance_test::PerftestProducer" base_class_type="nodelet::Nodelet">
+    <description>
+      Nodelet that produces messages
+    </description>
+  </class>
+  <class name="ros_performance_test/PerftestConsumer" type="ros_performance_test::PerftestConsumer" base_class_type="nodelet::Nodelet">
+    <description>
+      Nodelet that consumes messages
+    </description>
+  </class>
+</library>

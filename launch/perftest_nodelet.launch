@@ -1,0 +1,16 @@
+<launch>
+  <node pkg="nodelet" type="nodelet" name="standalone_nodelet"  args="manager" output="screen"/>
+
+  <node pkg="nodelet" type="nodelet" name="PerftestProducer1" args="load ros_performance_test/PerftestProducer standalone_nodelet" output="screen">
+    <rosparam file="$(find ros_performance_test)/config/params_1.yaml" command="load"/>
+  </node>
+
+  <node pkg="nodelet" type="nodelet" name="PerftestProducer2" args="load ros_performance_test/PerftestProducer standalone_nodelet" output="screen">
+    <rosparam file="$(find ros_performance_test)/config/params_2.yaml" command="load"/>
+  </node>
+
+  <node pkg="nodelet" type="nodelet" name="PerftestConsumer" args="load ros_performance_test/PerftestConsumer standalone_nodelet" output="screen">
+    <rosparam file="$(find ros_performance_test)/config/params_consumer.yaml" command="load"/>
+  </node>
+</launch>
+
