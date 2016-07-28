@@ -14,6 +14,7 @@ typedef boost::random::uniform_int_distribution<int> UniformDistribution;
 static const int kDefaultRate = 10;
 static const int kDefaultPayloadSize = 64;
 static const int kDefaultQueueSize = 1000;
+static const int kDefaultHashFunctionId = 2;
 
 static boost::mt19937 gen;
 
@@ -30,6 +31,7 @@ main(int argc, char** argv)
     int queue_size;
     int rate;
     int payload_size;
+    int hash_function_id;
 
     if (!priv_nh.getParam("rate", rate)) {
         ROS_WARN_STREAM("couldn't find 'rate' configuration parameter, using the default=" << kDefaultRate);
@@ -44,6 +46,11 @@ main(int argc, char** argv)
     if (!priv_nh.getParam("queue_size", queue_size)) {
         ROS_WARN_STREAM("couldn't find 'queue_size' configuration parameter, using the default=" << kDefaultQueueSize);
         queue_size = kDefaultQueueSize;
+    }
+
+    if (!priv_nh.getParam("hash_function_id", hash_function_id)) {
+        ROS_WARN_STREAM("couldn't find 'hash_function_id' configuration parameter, using the default=" << kDefaultHashFunctionId);
+        hash_function_id = kDefaultHashFunctionId;
     }
 
     uint16_t uid = boost::hash_value<boost::uuids::uuid>(unique_id::fromRandom()) % std::numeric_limits<uint16_t>::max();
@@ -71,7 +78,15 @@ main(int argc, char** argv)
         for (int i = 0; i < payload_size; i++) {
             msg.data.push_back(small_ints(gen));
         }
-        msg.header.data_hash = data_hash_2(msg.data.begin(), msg.data.end());
+
+        if (hash_function_id == kDefaultHashFunctionId) {
+            msg.header.data_hash = data_hash_2(msg.data.begin(), msg.data.end());
+        } else if (hash_function_id == 1) {
+            msg.header.data_hash = data_hash_1(msg.data.begin(), msg.data.end());
+        } else {
+            ROS_ERROR_STREAM("Unknown id of data hash function: " << hash_function_id);
+        }
+
         msg.header.ts = ros::Time::now();
 
         chatter_pub.publish(msg);

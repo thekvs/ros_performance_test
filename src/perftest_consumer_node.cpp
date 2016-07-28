@@ -28,6 +28,7 @@ typedef std::vector<LogEntry> LogEntries;
 
 static const std::string kDefaultLogFile = "/tmp/ros_perftest.log";
 static const int kDefaultQueueSize = 1000;
+static const int kDefaultHashFunctionId = 2;
 
 bool
 write_log(const std::string& fname, const LogEntries& log_data)
@@ -59,12 +60,20 @@ write_log(const std::string& fname, const LogEntries& log_data)
 }
 
 void
-data_cb(const ros_performance_test::TestMessage::ConstPtr& msg, LogEntries& log_data)
+data_cb(const ros_performance_test::TestMessage::ConstPtr& msg, LogEntries& log_data, int hash_function_id)
 {
     LogEntry e;
 
     e.incoming = msg->header;
-    e.data_hash = data_hash_2(msg->data.begin(), msg->data.end());
+
+    if (hash_function_id == kDefaultHashFunctionId) {
+        e.data_hash = data_hash_2(msg->data.begin(), msg->data.end());
+    } else if (hash_function_id == 1) {
+        e.data_hash = data_hash_1(msg->data.begin(), msg->data.end());
+    } else {
+        ROS_ERROR_STREAM("Unknown id of data hash function: " << hash_function_id);
+    }
+
     e.ts = ros::Time::now();
 
     log_data.push_back(e);
@@ -80,6 +89,7 @@ main(int argc, char** argv)
 
     std::string log_file;
     int queue_size;
+    int hash_function_id;
 
     if (!priv_nh.getParam("log_file", log_file)) {
         ROS_WARN_STREAM("couldn't find 'log_file' configuration parameter, using the default=" << kDefaultLogFile);
@@ -91,13 +101,18 @@ main(int argc, char** argv)
         queue_size = kDefaultQueueSize;
     }
 
+    if (!priv_nh.getParam("hash_function_id", hash_function_id)) {
+        ROS_WARN_STREAM("couldn't find 'hash_function_id' configuration parameter, using the default=" << kDefaultHashFunctionId);
+        hash_function_id = kDefaultHashFunctionId;
+    }
+
     ros::TransportHints transport_hints = ros::TransportHints().unreliable(); // UDP transport
 
     LogEntries log_data;
     log_data.reserve(10000);
 
-    ros::Subscriber sub
-        = nh.subscribe<ros_performance_test::TestMessage>("producer", queue_size, boost::bind(data_cb, _1, boost::ref(log_data)));
+    ros::Subscriber sub = nh.subscribe<ros_performance_test::TestMessage>(
+        "producer", queue_size, boost::bind(data_cb, _1, boost::ref(log_data), hash_function_id));
 
     ros::spin();
 
