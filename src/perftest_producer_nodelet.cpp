@@ -71,6 +71,7 @@ private:
             }
 
             msg->header.uid = uid;
+            msg->header.hash_function_id = hash_function_id;
             msg->header.ts = ros::Time::now();
 
             pub.publish(msg);

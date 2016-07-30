@@ -22,8 +22,7 @@ struct LogEntry {
     ros::Time ts;
 };
 
-std::ostream&
-operator<<(std::ostream& stream, const LogEntry& e)
+std::ostream& operator<<(std::ostream& stream, const LogEntry& e)
 {
     stream << e.incoming.uid << "," << e.incoming.seq << "," << e.incoming.data_hash << "," << e.incoming.ts.sec << ","
            << e.incoming.ts.nsec << ",";
@@ -43,7 +42,6 @@ class PerftestConsumer : public nodelet::Nodelet
 public:
     PerftestConsumer()
         : queue_size(0)
-        , hash_function_id(0)
     {
         log_data.reserve(10000);
     }
@@ -60,7 +58,6 @@ private:
 
     std::string log_file;
     int queue_size;
-    int hash_function_id;
 
     bool
     write_log()
@@ -71,8 +68,19 @@ private:
 
         std::fstream result(log_file.c_str(), std::fstream::out);
 
-        const char* headers[] = { "node_id", "sequence_number", "data_hash_on_sender", "ts_sec_sent", "ts_nsec_sent",
-            "data_hash_on_receiver", "ts_sec_received", "ts_nsec_received", NULL };
+        // clang-format off
+        const char* headers[] = {
+            "node_id",
+            "sequence_number",
+            "data_hash_on_sender",
+            "ts_sec_sent",
+            "ts_nsec_sent",
+            "data_hash_on_receiver",
+            "ts_sec_received",
+            "ts_nsec_received",
+            NULL
+        };
+        // clang-format on
 
         int idx = 0;
         while (headers[idx] != NULL) {
@@ -97,6 +105,7 @@ private:
         LogEntry e;
 
         e.incoming = msg->header;
+        int hash_function_id = msg->header.hash_function_id;
 
         if (hash_function_id == kDefaultHashFunctionId) {
             e.data_hash = data_hash_2(msg->data.begin(), msg->data.end());
@@ -125,11 +134,6 @@ private:
         if (!priv_nh.getParam("queue_size", queue_size)) {
             NODELET_WARN_STREAM("couldn't find 'queue_size' configuration parameter, using the default=" << kDefaultQueueSize);
             queue_size = kDefaultQueueSize;
-        }
-
-        if (!priv_nh.getParam("hash_function_id", hash_function_id)) {
-            NODELET_WARN_STREAM("couldn't find 'hash_function_id' configuration parameter, using the default=" << kDefaultHashFunctionId);
-            hash_function_id = kDefaultHashFunctionId;
         }
 
         NODELET_INFO_STREAM("Message queue size: " << queue_size);

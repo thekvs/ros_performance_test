@@ -14,8 +14,7 @@ struct LogEntry {
     ros::Time ts;
 };
 
-std::ostream&
-operator<<(std::ostream& stream, const LogEntry& e)
+std::ostream& operator<<(std::ostream& stream, const LogEntry& e)
 {
     stream << e.incoming.uid << "," << e.incoming.seq << "," << e.incoming.data_hash << "," << e.incoming.ts.sec << ","
            << e.incoming.ts.nsec << ",";
@@ -39,8 +38,19 @@ write_log(const std::string& fname, const LogEntries& log_data)
 
     std::fstream result(fname.c_str(), std::fstream::out);
 
-    const char* headers[] = { "node_id", "sequence_number", "data_hash_on_sender", "ts_sec_sent", "ts_nsec_sent", "data_hash_on_receiver",
-        "ts_sec_received", "ts_nsec_received", NULL };
+    // clang-format off
+    const char* headers[] = {
+        "node_id",
+        "sequence_number",
+        "data_hash_on_sender",
+        "ts_sec_sent",
+        "ts_nsec_sent",
+        "data_hash_on_receiver",
+        "ts_sec_received",
+        "ts_nsec_received",
+        NULL
+    };
+    // clang-format on
 
     int idx = 0;
     while (headers[idx] != NULL) {
@@ -60,11 +70,12 @@ write_log(const std::string& fname, const LogEntries& log_data)
 }
 
 void
-data_cb(const ros_performance_test::TestMessage::ConstPtr& msg, LogEntries& log_data, int hash_function_id)
+data_cb(const ros_performance_test::TestMessage::ConstPtr& msg, LogEntries& log_data)
 {
     LogEntry e;
 
     e.incoming = msg->header;
+    int hash_function_id = msg->header.hash_function_id;
 
     if (hash_function_id == kDefaultHashFunctionId) {
         e.data_hash = data_hash_2(msg->data.begin(), msg->data.end());
@@ -89,7 +100,6 @@ main(int argc, char** argv)
 
     std::string log_file;
     int queue_size;
-    int hash_function_id;
 
     if (!priv_nh.getParam("log_file", log_file)) {
         ROS_WARN_STREAM("couldn't find 'log_file' configuration parameter, using the default=" << kDefaultLogFile);
@@ -101,18 +111,13 @@ main(int argc, char** argv)
         queue_size = kDefaultQueueSize;
     }
 
-    if (!priv_nh.getParam("hash_function_id", hash_function_id)) {
-        ROS_WARN_STREAM("couldn't find 'hash_function_id' configuration parameter, using the default=" << kDefaultHashFunctionId);
-        hash_function_id = kDefaultHashFunctionId;
-    }
-
     ros::TransportHints transport_hints = ros::TransportHints().unreliable(); // UDP transport
 
     LogEntries log_data;
     log_data.reserve(10000);
 
-    ros::Subscriber sub = nh.subscribe<ros_performance_test::TestMessage>(
-        "producer", queue_size, boost::bind(data_cb, _1, boost::ref(log_data), hash_function_id));
+    ros::Subscriber sub
+        = nh.subscribe<ros_performance_test::TestMessage>("producer", queue_size, boost::bind(data_cb, _1, boost::ref(log_data)));
 
     ros::spin();
 

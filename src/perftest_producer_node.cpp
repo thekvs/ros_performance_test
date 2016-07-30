@@ -68,6 +68,7 @@ main(int argc, char** argv)
     ros_performance_test::TestMessage msg;
     msg.data.reserve(payload_size);
     msg.header.uid = uid;
+    msg.header.hash_function_id = hash_function_id;
 
     boost::random::uniform_int_distribution<> small_ints(0, 255);
 
