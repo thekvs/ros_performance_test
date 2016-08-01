@@ -3,6 +3,7 @@
 #include <boost/random.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/atomic.hpp>
 
 #include <nodelet/nodelet.h>
 #include <pluginlib/class_list_macros.h>
@@ -48,15 +49,16 @@ private:
     loop()
     {
         ros_performance_test::TestMessagePtr msg(new ros_performance_test::TestMessage());
-        uint32_t seq = 0;
+        boost::atomic<uint32_t> seq(0);
 
         boost::random::uniform_int_distribution<> small_ints(0, 255);
         ros::Rate loop_rate(rate);
 
         while (ros::ok()) {
+            seq++;
             msg->data.clear();
 
-            msg->header.seq = ++seq;
+            msg->header.seq = seq;
             for (int i = 0; i < payload_size; i++) {
                 msg->data.push_back(small_ints(gen));
             }
