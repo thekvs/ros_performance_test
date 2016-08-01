@@ -84,12 +84,12 @@ private:
     virtual void
     onInit()
     {
-        gen.seed(time(NULL));
+        struct timespec ts;
+        clock_gettime(CLOCK_REALTIME, &ts);
+        gen.seed(ts.tv_nsec);
 
         ros::NodeHandle nh;
         ros::NodeHandle priv_nh = nodelet::Nodelet::getMTPrivateNodeHandle();
-
-        gen.seed(time(NULL));
 
         if (!priv_nh.getParam("uid", uid)) {
             ROS_ERROR_STREAM("couldn't find mandatory 'uid' configuration parameter");

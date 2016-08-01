@@ -25,7 +25,9 @@ main(int argc, char** argv)
     ros::NodeHandle nh;
     ros::NodeHandle priv_nh("~");
 
-    gen.seed(time(NULL));
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+    gen.seed(ts.tv_nsec);
 
     int uid;
     int queue_size;
