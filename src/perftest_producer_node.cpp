@@ -4,7 +4,6 @@
 #include <boost/random/uniform_int_distribution.hpp>
 
 #include <ros/ros.h>
-#include <unique_id/unique_id.h>
 
 #include "ros_performance_test/TestMessage.h"
 #include "ros_performance_test/data_hash.hpp"
@@ -28,10 +27,21 @@ main(int argc, char** argv)
 
     gen.seed(time(NULL));
 
+    int uid;
     int queue_size;
     int rate;
     int payload_size;
     int hash_function_id;
+
+    if (!priv_nh.getParam("uid", uid)) {
+        ROS_ERROR_STREAM("couldn't find mandatory 'uid' configuration parameter");
+        exit(EXIT_FAILURE);
+    } else {
+        if (uid < 0 || uid > std::numeric_limits<uint16_t>::max()) {
+            ROS_ERROR_STREAM("parameter 'uid' must be within [0, " << std::numeric_limits<uint16_t>::max() << "] boundaries");
+            exit(EXIT_FAILURE);
+        }
+    }
 
     if (!priv_nh.getParam("rate", rate)) {
         ROS_WARN_STREAM("couldn't find 'rate' configuration parameter, using the default=" << kDefaultRate);
@@ -52,8 +62,6 @@ main(int argc, char** argv)
         ROS_WARN_STREAM("couldn't find 'hash_function_id' configuration parameter, using the default=" << kDefaultHashFunctionId);
         hash_function_id = kDefaultHashFunctionId;
     }
-
-    uint16_t uid = boost::hash_value<boost::uuids::uuid>(unique_id::fromRandom()) % std::numeric_limits<uint16_t>::max();
 
     ROS_INFO_STREAM("Node's ID: " << uid);
     ROS_INFO_STREAM("Payload size: " << payload_size);

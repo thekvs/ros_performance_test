@@ -8,7 +8,6 @@
 #include <pluginlib/class_list_macros.h>
 
 #include <ros/ros.h>
-#include <unique_id/unique_id.h>
 
 #include "ros_performance_test/TestMessage.h"
 #include "ros_performance_test/data_hash.hpp"
@@ -38,7 +37,7 @@ public:
 private:
     ros::Publisher pub;
     boost::mt19937 gen;
-    uint16_t uid;
+    int uid;
 
     int queue_size;
     int rate;
@@ -87,12 +86,20 @@ private:
     {
         gen.seed(time(NULL));
 
-        uid = boost::hash_value<boost::uuids::uuid>(unique_id::fromRandom()) % std::numeric_limits<uint16_t>::max();
-
         ros::NodeHandle nh;
         ros::NodeHandle priv_nh = nodelet::Nodelet::getMTPrivateNodeHandle();
 
         gen.seed(time(NULL));
+
+        if (!priv_nh.getParam("uid", uid)) {
+            ROS_ERROR_STREAM("couldn't find mandatory 'uid' configuration parameter");
+            exit(EXIT_FAILURE);
+        } else {
+            if (uid < 0 || uid > std::numeric_limits<uint16_t>::max()) {
+                ROS_ERROR_STREAM("parameter 'uid' must be within [0, " << std::numeric_limits<uint16_t>::max() << "] boundaries");
+                exit(EXIT_FAILURE);
+            }
+        }
 
         if (!priv_nh.getParam("rate", rate)) {
             NODELET_WARN_STREAM("couldn't find 'rate' configuration parameter, using the default=" << kDefaultRate);
@@ -113,8 +120,6 @@ private:
             NODELET_WARN_STREAM("couldn't find 'hash_function_id' configuration parameter, using the default=" << kDefaultHashFunctionId);
             hash_function_id = kDefaultHashFunctionId;
         }
-
-        uint16_t uid = boost::hash_value<boost::uuids::uuid>(unique_id::fromRandom()) % std::numeric_limits<uint16_t>::max();
 
         NODELET_INFO_STREAM("Node's ID: " << uid);
         NODELET_INFO_STREAM("Payload size: " << payload_size);
