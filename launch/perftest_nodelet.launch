@@ -21,6 +21,10 @@
     <rosparam file="$(find ros_performance_test)/config/params_5.yaml" command="load"/>
   </node>
 
+  <node pkg="nodelet" type="nodelet" name="PerftestProducer6" args="load ros_performance_test/PerftestProducer perftest" output="screen">
+    <rosparam file="$(find ros_performance_test)/config/params_6.yaml" command="load"/>
+  </node>
+
   <node pkg="nodelet" type="nodelet" name="PerftestConsumer" args="load ros_performance_test/PerftestConsumer perftest" output="screen">
     <rosparam file="$(find ros_performance_test)/config/params_consumer.yaml" command="load"/>
   </node>
