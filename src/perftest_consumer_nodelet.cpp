@@ -8,7 +8,6 @@
 #include <pluginlib/class_list_macros.h>
 
 #include <ros/ros.h>
-#include <unique_id/unique_id.h>
 
 #include "ros_performance_test/TestMessage.h"
 #include "ros_performance_test/data_hash.hpp"

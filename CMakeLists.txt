@@ -9,7 +9,6 @@ find_package(catkin REQUIRED COMPONENTS
     message_runtime
     std_msgs
     roscpp
-    unique_id
 )
 
 ## System dependencies are found with CMake's conventions
