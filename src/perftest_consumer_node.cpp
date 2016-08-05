@@ -100,6 +100,7 @@ main(int argc, char** argv)
 
     std::string log_file;
     int queue_size;
+    bool unreliable_transport = false;
 
     if (!priv_nh.getParam("log_file", log_file)) {
         ROS_WARN_STREAM("couldn't find 'log_file' configuration parameter, using the default=" << kDefaultLogFile);
@@ -111,13 +112,23 @@ main(int argc, char** argv)
         queue_size = kDefaultQueueSize;
     }
 
-    ros::TransportHints transport_hints = ros::TransportHints().unreliable(); // UDP transport
+    if (!priv_nh.getParam("unreliable_transport", unreliable_transport)) {
+        ROS_WARN_STREAM("couldn't find 'unreliable_transport' configuration parameter, using the default=false");
+    }
+
+    ros::TransportHints transport_hints;
+    if (unreliable_transport) {
+        transport_hints = ros::TransportHints().unreliable(); // UDP transport
+    } else {
+        transport_hints = ros::TransportHints();
+    }
 
     LogEntries log_data;
     log_data.reserve(10000);
 
-    ros::Subscriber sub
-        = nh.subscribe<ros_performance_test::TestMessage>("producer", queue_size, boost::bind(data_cb, _1, boost::ref(log_data)));
+    ros::VoidConstPtr aux;
+    ros::Subscriber sub = nh.subscribe<ros_performance_test::TestMessage>(
+        "producer", queue_size, boost::bind(data_cb, _1, boost::ref(log_data)), aux, transport_hints);
 
     ros::spin();
 
