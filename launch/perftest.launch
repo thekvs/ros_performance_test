@@ -2,7 +2,29 @@
   <node name="perftest_producer_node_1" pkg="ros_performance_test" type="perftest_producer_node" output="screen">
     <rosparam file="$(find ros_performance_test)/config/params_1.yaml" command="load"/>
   </node>
+
   <node name="perftest_producer_node_2" pkg="ros_performance_test" type="perftest_producer_node" output="screen">
     <rosparam file="$(find ros_performance_test)/config/params_2.yaml" command="load"/>
+  </node>
+
+  <node name="perftest_producer_node_3" pkg="ros_performance_test" type="perftest_producer_node" output="screen">
+    <rosparam file="$(find ros_performance_test)/config/params_3.yaml" command="load"/>
+  </node>
+
+  <node name="perftest_producer_node_4" pkg="ros_performance_test" type="perftest_producer_node" output="screen">
+    <rosparam file="$(find ros_performance_test)/config/params_4.yaml" command="load"/>
+  </node>
+
+  <node name="perftest_producer_node_5" pkg="ros_performance_test" type="perftest_producer_node" output="screen">
+    <rosparam file="$(find ros_performance_test)/config/params_5.yaml" command="load"/>
+  </node>
+
+  <node name="perftest_producer_node_6" pkg="ros_performance_test" type="perftest_producer_node" output="screen">
+    <rosparam file="$(find ros_performance_test)/config/params_6.yaml" command="load"/>
+  </node>
+
+  <node name="perftest_consumer_node" pkg="ros_performance_test" type="perftest_consumer_node" output="screen">
+    <rosparam file="$(find ros_performance_test)/config/params_consumer.yaml" command="load"/>
+    <param name="log_file" type="str" value="/tmp/ros_perftest.csv" />
   </node>
 </launch>
