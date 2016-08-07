@@ -1,2 +1,1 @@
-log_file: "/tmp/ros_perftest_nodelet.csv"
 queue_size: 10

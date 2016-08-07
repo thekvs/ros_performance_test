@@ -27,6 +27,7 @@
 
   <node pkg="nodelet" type="nodelet" name="PerftestConsumer" args="load ros_performance_test/PerftestConsumer perftest" output="screen">
     <rosparam file="$(find ros_performance_test)/config/params_consumer.yaml" command="load"/>
+    <param name="log_file" type="str" value="/tmp/ros_perftest_nodelet.csv" />
   </node>
 </launch>
 
