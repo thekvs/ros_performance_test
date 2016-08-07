@@ -1,3 +1,2 @@
 log_file: "/tmp/ros_perftest_nodelet.csv"
 queue_size: 10
-hash_function_id: 1
